@@ -11,6 +11,7 @@ Next.js 16 (App Router), React 19, TypeScript 5, Tailwind CSS v4, shadcn/ui (bas
 - `pnpm dev` — start dev server
 - `pnpm build` — production build (run to verify changes)
 - `pnpm lint` — eslint check
+- `bash scripts/claude-onboarding.sh` — setup Claude memory (run once after clone)
 
 ## Folder Structure
 
@@ -74,11 +75,31 @@ constants/              # App-wide constants
 
 Conventional commits: `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`
 
+## Workflow
+
+1. **Plan first**: Use `make-plan` before any non-trivial feature. Never code without an approved plan.
+2. **Explore smart**: Use `smart-explore` for codebase research (AST-based, token-efficient). Avoid reading full files.
+3. **Build UI**: Use `frontend-design` skill for components. Avoid generic AI aesthetics.
+4. **Figma**: Use `figma-implement-design` for design-to-code. Always load `figma-use` skill first.
+5. **Execute**: Use `do` to run plans with parallel subagents when possible.
+6. **Review**: Run `simplify` after feature completion. Run `code-review` before PR.
+7. **Verify**: `pnpm build && pnpm lint` must pass before commit.
+
+## Quality Rules
+
+- Prop types always explicit. No `any` unless unavoidable.
+- Error boundaries for route segments. No silent failures.
+- No `dangerouslySetInnerHTML`. Sanitize all user input.
+- No hardcoded secrets. Use env variables.
+- Accessible by default: semantic HTML, aria labels, keyboard nav.
+
 ## Claude Behavior
 
 - Be concise. No verbose JSDoc on obvious code.
 - YAGNI — don't create abstractions until needed.
 - Always follow the approved plan. Do not deviate.
 - Run `pnpm build` after changes to verify.
+- Use memory: save feedback, project decisions, user preferences.
+- Use parallel agents for independent tasks (research, test, lint).
 - Keep this file under 120 lines.
 - Conversation language: Turkish. Code/comments: English.
