@@ -1,11 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
 
-/**
- * React Query Client Configuration
- *
- * @description Initializes and configures the QueryClient for data fetching
- * @features Handles caching, refetching, deduplication, and persistence
- */
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
