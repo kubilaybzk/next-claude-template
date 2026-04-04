@@ -265,8 +265,9 @@ Key rules:
 
 When creating a new feature `[name]`:
 1. Create `features/[name]/types/index.ts` — define data types
-2. Create `features/[name]/services/[name]-service.ts` — API hooks
-3. Create `features/[name]/components/` — UI components
-4. Add route in `app/[name]/page.tsx`
-5. If shared state needed → `features/[name]/store/[name]-slice.ts` (rare)
-6. If reusable component emerges → move to `components/shared/` + update `REGISTRY.md`
+2. Create `features/[name]/validations/` — zod schemas + inferred types
+3. Create `features/[name]/services/[name]-service.ts` — API hooks
+4. Create `features/[name]/components/` — UI components
+5. Add route in `app/[name]/page.tsx`
+6. If shared state needed → `features/[name]/store/[name]-slice.ts` (rare)
+7. If reusable component emerges → move to `components/shared/` + update `REGISTRY.md`
