@@ -63,7 +63,7 @@ export default function HomePage() {
         </Card>
       </div>
 
-      <Button render={<Link href="https://nextjs.org/docs" target="_blank" />}>
+      <Button nativeButton={false} render={<Link href="https://nextjs.org/docs" target="_blank" />}>
         Next.js Documentation
       </Button>
     </div>
