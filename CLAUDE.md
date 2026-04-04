@@ -48,8 +48,10 @@ constants/              # App-wide constants
 
 - Server components by default. Add `'use client'` only when needed.
 - Use shadcn from `@/components/ui/` — never modify ui/ files directly.
-- Shared components go in `components/shared/`.
-- Feature components go in `features/[name]/components/`.
+- **Before creating UI**: MUST read `components/shared/REGISTRY.md` — never use raw HTML when a shadcn or shared component exists.
+- Used in 1 place → `features/[name]/components/`. Used in 2+ places → `components/shared/`.
+- When adding to shared: update `REGISTRY.md` with name, path, props, usage example.
+- Wrap feature sections with `<ErrorBoundary name="...">` from `@/components/shared/error-boundary`.
 
 ## State Management
 

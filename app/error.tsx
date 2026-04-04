@@ -1,5 +1,8 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { ArrowClockwise } from '@phosphor-icons/react';
+
 export default function Error({
   error,
   reset,
@@ -11,12 +14,10 @@ export default function Error({
     <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4">
       <h2 className="text-2xl font-semibold">Something went wrong</h2>
       <p className="text-muted-foreground">{error.message}</p>
-      <button
-        onClick={reset}
-        className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
-      >
+      <Button onClick={reset}>
+        <ArrowClockwise />
         Try again
-      </button>
+      </Button>
     </div>
   );
 }
