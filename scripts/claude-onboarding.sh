@@ -6,8 +6,9 @@ set -e
 
 # Detect project path for Claude memory
 PROJECT_PATH=$(cd "$(dirname "$0")/.." && pwd)
-# Claude stores memories per-project using the absolute path with dashes
-MEMORY_KEY=$(echo "$PROJECT_PATH" | sed 's|/|-|g; s|^-||')
+# Claude stores memories per-project using the absolute path with / replaced by -
+# Underscores in path are also replaced with dashes, leading dash is kept
+MEMORY_KEY=$(echo "$PROJECT_PATH" | sed 's|/|-|g; s|_|-|g')
 MEMORY_DIR="$HOME/.claude/projects/$MEMORY_KEY/memory"
 
 echo "Setting up Claude Code memory for: $PROJECT_PATH"
@@ -15,11 +16,12 @@ echo "Memory directory: $MEMORY_DIR"
 
 mkdir -p "$MEMORY_DIR"
 
-# --- MEMORY.md (index file) ---
-cat > "$MEMORY_DIR/MEMORY.md" << 'EOF'
-- [Project Conventions](project_conventions.md) — Workflow, quality rules, skill usage for this project
-- [Team Standards](team_standards.md) — Code review checklist, PR process, deploy flow
-EOF
+# --- MEMORY.md (append project entries if not already present) ---
+touch "$MEMORY_DIR/MEMORY.md"
+grep -q "project_conventions.md" "$MEMORY_DIR/MEMORY.md" || \
+  echo "- [Project Conventions](project_conventions.md) — Workflow, quality rules, skill usage for this project" >> "$MEMORY_DIR/MEMORY.md"
+grep -q "team_standards.md" "$MEMORY_DIR/MEMORY.md" || \
+  echo "- [Team Standards](team_standards.md) — Code review checklist, PR process, deploy flow" >> "$MEMORY_DIR/MEMORY.md"
 
 # --- Project Conventions ---
 cat > "$MEMORY_DIR/project_conventions.md" << 'EOF'

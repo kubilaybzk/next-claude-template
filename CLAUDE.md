@@ -34,6 +34,7 @@ lib/                    # General utilities
 store/                  # Redux store config
 types/                  # Shared TypeScript types
 constants/              # App-wide constants
+scripts/                # Dev scripts (onboarding, etc.)
 ```
 
 ## Naming
@@ -48,7 +49,7 @@ constants/              # App-wide constants
 
 - Server components by default. Add `'use client'` only when needed.
 - Use shadcn from `@/components/ui/` — never modify ui/ files directly.
-- **Before creating UI**: MUST read `components/shared/REGISTRY.md` — never use raw HTML when a shadcn or shared component exists.
+- **Before creating UI**: MUST read `components/shared/REGISTRY.md` and `PATTERNS.md` — never use raw HTML when a shadcn or shared component exists.
 - Used in 1 place → `features/[name]/components/`. Used in 2+ places → `components/shared/`.
 - When adding to shared: update `REGISTRY.md` with name, path, props, usage example.
 - Wrap feature sections with `<ErrorBoundary name="...">` from `@/components/shared/error-boundary`.
