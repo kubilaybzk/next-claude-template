@@ -93,7 +93,7 @@ export default function Error({
 ```tsx
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from '@phosphor-icons/react/dist/ssr';
+import { House } from '@phosphor-icons/react/dist/ssr';
 
 export default function NotFound() {
   return (
@@ -101,8 +101,8 @@ export default function NotFound() {
       <h2 className="text-4xl font-bold">404</h2>
       <p className="text-muted-foreground">Page not found</p>
       <Button render={<Link href="/" />}>
-        <ArrowLeft />
-        Go back
+        <House />
+        Go home
       </Button>
     </div>
   );

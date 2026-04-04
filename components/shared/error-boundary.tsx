@@ -78,12 +78,14 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
           {error?.stack && (
             <>
-              <button
+              <Button
+                size="sm"
+                variant="link"
                 onClick={() => this.setState({ showStack: !showStack })}
-                className="mt-2 text-xs underline hover:text-foreground"
+                className="mt-2 h-auto p-0 text-xs"
               >
                 {showStack ? 'Hide' : 'Show'} Stack Trace
-              </button>
+              </Button>
               {showStack && (
                 <pre className="mt-2 max-h-48 overflow-auto rounded bg-muted p-2 font-mono text-xs text-muted-foreground">
                   {error.stack}
