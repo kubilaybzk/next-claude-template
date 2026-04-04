@@ -54,6 +54,14 @@ Never write raw `<button>`, `<input>`, `<table>`, etc. Use these instead:
 | `AspectRatio` | Fixed aspect ratio containers | `@/components/ui/aspect-ratio` |
 | `Avatar` | User avatars | `@/components/ui/avatar` |
 | `Kbd` | Keyboard shortcut display | `@/components/ui/kbd` |
+| `AlertDialog` | Confirmation dialogs (destructive actions) | `@/components/ui/alert-dialog` |
+| `ButtonGroup` | Grouped buttons | `@/components/ui/button-group` |
+| `Carousel` | Image/content carousels (Embla) | `@/components/ui/carousel` |
+| `Chart` | Data visualization (Recharts) | `@/components/ui/chart` |
+| `Empty` | Empty state placeholder | `@/components/ui/empty` |
+| `InputGroup` | Input with prefix/suffix addons | `@/components/ui/input-group` |
+| `Item` | Generic list item | `@/components/ui/item` |
+| `NativeSelect` | Native HTML select dropdown | `@/components/ui/native-select` |
 
 **Icons:** Use `@phosphor-icons/react` (client) or `@phosphor-icons/react/dist/ssr` (server).
 

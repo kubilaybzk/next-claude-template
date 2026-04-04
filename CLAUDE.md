@@ -66,6 +66,7 @@ scripts/                # Dev scripts (onboarding, etc.)
 - Query keys: `services/query-keys.ts` — factory pattern `[feature, resource, params?]`
 - Feature services: `features/[name]/services/` — export React Query hooks
 - Pattern: service function -> `useQuery`/`useMutation` hook -> component
+- Proxy: `proxy.ts` (Next.js 16 replacement for middleware) — auth, redirects, locale
 
 ## Styling
 

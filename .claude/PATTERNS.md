@@ -42,6 +42,19 @@ export function UserCard({ user, onEdit }: UserCardProps) {
 - Destructure props in function signature
 - Use shadcn components — never raw HTML for buttons, inputs, cards, etc.
 - Wrap with `<ErrorBoundary>` at feature section level, not every component
+- This project uses `base-vega` style: use `render` prop (not `asChild`) for polymorphic components
+
+**Polymorphic component (Button as Link):**
+```tsx
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+
+// ✅ Correct — base-vega style
+<Button render={<Link href="/users" />}>Go to Users</Button>
+
+// ❌ Wrong — asChild does not exist in base-vega
+<Button asChild><Link href="/users">Go to Users</Link></Button>
+```
 
 ## React Query — Fetch (GET)
 
