@@ -13,7 +13,8 @@ When invoked with `/scaffold <feature-name>`, create a complete feature scaffold
 1. Take the feature name from the argument (e.g., `/scaffold auth` → feature name is `auth`)
 2. Read `.claude/PATTERNS.md` for the correct file patterns
 3. Read `components/shared/REGISTRY.md` to avoid duplicating existing components
-4. Create the following structure:
+4. Read `.claude/design-system-rules.md` for styling tokens and component composition rules
+5. Create the following structure:
 
 ```
 features/<name>/
@@ -122,10 +123,17 @@ export function useDelete<Name>() {
 
 ### `app/<name>/page.tsx`
 ```tsx
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '<Title>',
+  description: '<Description of this page>',
+};
+
 export default function <Name>Page() {
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-2xl font-bold"><Name></h1>
+      <h1 className="text-2xl font-bold"><Title></h1>
       {/* TODO: implement page content */}
     </div>
   );
@@ -139,5 +147,8 @@ export default function <Name>Page() {
 - All imports must use `@/` alias
 - Service file must follow the pattern from `.claude/PATTERNS.md`
 - Types must follow the pattern from `.claude/PATTERNS.md`
+- Always export `metadata` in page.tsx — never create a page without it
+- Use `render` prop (not `asChild`) for polymorphic components (base-vega style)
+- Use semantic color tokens from design-system-rules.md — never hardcode colors
 - After creating files, run `pnpm build` to verify no errors
 - Report what was created to the user

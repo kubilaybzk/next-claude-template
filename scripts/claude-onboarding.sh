@@ -45,6 +45,12 @@ This project uses a strict AI-assisted development workflow.
 **Why:** Token cost optimization and consistent quality across all contributors.
 
 **How to apply:** Never skip the plan step. Always run simplify + code-review before committing. Use parallel agents for independent tasks.
+
+**Required reading before writing code:**
+- `CLAUDE.md` — project rules (loaded automatically every conversation)
+- `.claude/PATTERNS.md` — component, service, and form patterns
+- `components/shared/REGISTRY.md` — shadcn + shared component catalog
+- `.claude/design-system-rules.md` — color tokens, typography, spacing
 EOF
 
 # --- Team Standards ---
