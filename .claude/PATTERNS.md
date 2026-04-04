@@ -229,7 +229,7 @@ Every `page.tsx` must export `metadata`. Never create a page without it.
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Dashboard | App Name',
+  title: 'Dashboard',
   description: 'View your dashboard and analytics',
 };
 ```
@@ -245,7 +245,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   return {
-    title: `User ${id} | App Name`,
+    title: `User ${id}`,
     description: `User profile for ${id}`,
   };
 }

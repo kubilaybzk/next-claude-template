@@ -30,7 +30,7 @@ app/<route>/
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '<Title> | App Name',
+  title: '<Title>',
   description: '<Description of this page>',
 };
 
