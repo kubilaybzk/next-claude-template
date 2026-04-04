@@ -220,6 +220,37 @@ export interface CreateUserInput {
 export type UpdateUserInput = Partial<CreateUserInput>;
 ```
 
+## Page Metadata (SEO)
+
+Every `page.tsx` must export `metadata`. Never create a page without it.
+
+```tsx
+// Static metadata
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Dashboard | App Name',
+  description: 'View your dashboard and analytics',
+};
+```
+
+```tsx
+// Dynamic metadata (for detail pages)
+import type { Metadata } from 'next';
+
+interface Props {
+  params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  return {
+    title: `User ${id} | App Name`,
+    description: `User profile for ${id}`,
+  };
+}
+```
+
 ## New Feature Checklist
 
 When creating a new feature `[name]`:
