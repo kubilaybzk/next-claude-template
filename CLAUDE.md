@@ -72,8 +72,8 @@ scripts/                # Dev scripts (onboarding, etc.)
 
 - Tailwind utilities only. No custom CSS unless absolutely necessary.
 - Use `cn()` from `@/lib/utils` for conditional classes.
-- CSS variables defined in `app/globals.css`.
-- Mobile-first approach.
+- CSS variables defined in `app/globals.css`. Read `.claude/design-system-rules.md` for tokens.
+- Mobile-first approach. Use semantic color tokens, never raw colors.
 
 ## Git
 

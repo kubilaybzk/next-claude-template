@@ -41,5 +41,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# claude code (keep .claude/ but ignore temp files)
+# claude code (keep docs and skills, ignore temp files)
 .claude/worktrees/
+!.claude/PATTERNS.md
+!.claude/design-system-rules.md
+!.claude/skills/
