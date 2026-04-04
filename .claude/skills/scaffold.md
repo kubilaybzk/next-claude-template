@@ -21,6 +21,7 @@ features/<name>/
   components/
   hooks/
   services/<name>-service.ts
+  validations/
   types/index.ts
 app/<name>/
   page.tsx

@@ -251,6 +251,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 ```
 
+## Forms
+
+Forms use react-hook-form + zod. Detailed patterns in `.claude/form-rules.md` (auto-loaded when working on form files).
+
+Key rules:
+- Schema in `features/[name]/validations/[schema-name]-schema.ts`
+- Every field needs a default value
+- Validation errors inline, never via toast
+- Add `<FormValidationDebugger methods={methods} />` to every form
+
 ## New Feature Checklist
 
 When creating a new feature `[name]`:

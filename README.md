@@ -63,6 +63,7 @@ features/
     hooks/              # Feature-specific hooks
     services/           # React Query hooks + API calls
     types/              # Feature-specific types
+    validations/        # Zod schemas + inferred types
     store/              # Redux slice (only if needed)
 providers/              # App-level context providers
 services/               # Shared API layer (base client, query keys)

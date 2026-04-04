@@ -71,6 +71,25 @@ Never write raw `<button>`, `<input>`, `<table>`, etc. Use these instead:
 
 ## Shared Components (`@/components/shared/`)
 
+### FormValidationDebugger
+
+**Path:** `@/components/shared/form-validation-debugger`
+**Purpose:** Dev-only debug panel showing form state, errors, touched fields, and current values. Hidden in production.
+**Props:**
+- `methods` — `UseFormReturn` from react-hook-form
+
+**Usage:**
+```tsx
+import { FormValidationDebugger } from '@/components/shared/form-validation-debugger';
+
+<form onSubmit={onSubmit}>
+  {/* form fields */}
+  <FormValidationDebugger methods={methods} />
+</form>
+```
+
+---
+
 ### ErrorBoundary
 
 **Path:** `@/components/shared/error-boundary`
