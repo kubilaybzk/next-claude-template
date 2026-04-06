@@ -21,7 +21,7 @@ features/<name>/
   components/
   hooks/
   services/<name>-service.ts
-  validations/
+  validations/<name>-schema.ts
   types/index.ts
 app/<name>/
   page.tsx
@@ -34,15 +34,27 @@ app/<name>/
 
 ### `features/<name>/types/index.ts`
 ```tsx
+// Domain models only — form input types go in validations/ (see form-rules.md)
 export interface <Name> {
   id: string;
   createdAt: string;
   updatedAt: string;
 }
+```
 
-export interface Create<Name>Input {
-  // TODO: define create input fields
-}
+### `features/<name>/validations/<name>-schema.ts`
+```tsx
+import { z } from 'zod';
+
+export const create<Name>Schema = z.object({
+  // TODO: define fields with validation
+});
+
+export type Create<Name>Input = z.infer<typeof create<Name>Schema>;
+
+export const create<Name>Defaults: Create<Name>Input = {
+  // TODO: define defaults
+};
 
 export type Update<Name>Input = Partial<Create<Name>Input>;
 ```
@@ -52,7 +64,8 @@ export type Update<Name>Input = Partial<Create<Name>Input>;
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/services/api-client';
 import { queryKeys } from '@/services/query-keys';
-import type { <Name>, Create<Name>Input, Update<Name>Input } from '@/features/<name>/types';
+import type { <Name> } from '@/features/<name>/types';
+import type { Create<Name>Input, Update<Name>Input } from '@/features/<name>/validations/<name>-schema';
 import type { PaginatedResponse, PaginationParams } from '@/types/api';
 
 // --- Service functions ---

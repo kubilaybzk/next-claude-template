@@ -42,8 +42,11 @@ export function UserCard({ user, onDelete }: UserCardProps) {
 
 **Polymorphic component (Button as Link):**
 ```tsx
-// ✅ Correct — render prop (base-vega)
+// ✅ Internal link — render prop (base-vega)
 <Button render={<Link href="/users" />}>Go to Users</Button>
+
+// ✅ External link — add nativeButton={false} to prevent button behavior
+<Button nativeButton={false} render={<Link href="https://example.com" target="_blank" />}>External</Button>
 
 // ❌ Wrong — asChild does not exist
 <Button asChild><Link href="/users">Go to Users</Link></Button>
@@ -90,6 +93,7 @@ export function useUser(id: string) {
 ```tsx
 // features/users/services/user-service.ts (same file, add mutations)
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type { CreateUserInput, UpdateUserInput } from '@/features/users/validations/create-user-schema';
 
 function createUser(data: CreateUserInput) {
   return apiClient.post<User>('/users', data);
@@ -147,18 +151,27 @@ export function useDeleteUser() {
 'use client';
 
 import { useUsers, useDeleteUser } from '@/features/users/services/user-service';
-import { ErrorBoundary } from '@/components/shared/error-boundary';
-import { Empty } from '@/components/ui/empty';
+import { ErrorMessage } from '@/components/shared/error-message';
+import { EmptyState } from '@/components/shared/empty-state';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Users } from '@phosphor-icons/react';
 import { toast } from 'sonner';
 
 export function UserList() {
-  const { data, isLoading, error } = useUsers();
+  const { data, isLoading, error, refetch } = useUsers();
   const deleteUser = useDeleteUser();
 
   if (isLoading) return <UserListSkeleton />;
-  if (error) return <p className="text-destructive">{error.message}</p>;
-  if (!data?.data.length) return <Empty title="No users" description="Create your first user to get started." />;
+  if (error) return <ErrorMessage message={error.message} retry={refetch} />;
+  if (!data?.data.length) {
+    return (
+      <EmptyState
+        icon={<Users className="size-6" />}
+        title="No users"
+        description="Create your first user to get started."
+      />
+    );
+  }
 
   const handleDelete = (id: string) => {
     deleteUser.mutate(id, {
@@ -168,11 +181,11 @@ export function UserList() {
   };
 
   return (
-    <ErrorBoundary name="UserList">
+    <div className="space-y-3">
       {data.data.map((user) => (
         <UserCard key={user.id} user={user} onDelete={handleDelete} />
       ))}
-    </ErrorBoundary>
+    </div>
   );
 }
 
@@ -188,13 +201,16 @@ function UserListSkeleton() {
 ```
 
 **Rules:**
-- Loading → `Skeleton`, Error → inline message, Empty → `Empty` component, Mutation feedback → `toast()`
+- Loading → `Skeleton`, Error → `ErrorMessage` (shared), Empty → `EmptyState` (shared), Mutation feedback → `toast()`
 - See `design-system-rules.md → Component Composition Rules` for Loading vs Spinner distinction
+- Wrap from parent: `<ErrorBoundary name="UserList"><UserList /></ErrorBoundary>` — never inside the component itself
 
 ## Feature Types
 
+Domain models go in `types/`. Form input types are inferred from zod schemas in `validations/` (see `form-rules.md`).
+
 ```tsx
-// features/users/types/index.ts
+// features/users/types/index.ts — domain models only
 export interface User {
   id: string;
   name: string;
@@ -203,13 +219,8 @@ export interface User {
   createdAt: string;
 }
 
-export interface CreateUserInput {
-  name: string;
-  email: string;
-  role: 'admin' | 'user';
-}
-
-export type UpdateUserInput = Partial<CreateUserInput>;
+// Form input types (CreateUserInput, UpdateUserInput) live in
+// features/users/validations/ as z.infer<typeof schema> — see form-rules.md
 ```
 
 ## Page Metadata (SEO)

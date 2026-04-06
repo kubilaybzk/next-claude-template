@@ -86,7 +86,7 @@ CLAUDE.md                           ← Her konuşmada otomatik
 │                                      Kod örnekleri (component, query, service, SEO)
 │
 ├── .claude/REGISTRY.md             ← UI yazmadan önce
-│                                      Component kataloğu (50+ shadcn + shared)
+│                                      Component kataloğu (50+ shadcn + 4 shared)
 │
 ├── .claude/design-system-rules.md  ← UI oluştururken
 │                                      Görsel tokenlar (renk, font, spacing)
@@ -124,12 +124,12 @@ Senaryo: "Yeni feature için service yazacağım"
 → PATTERNS.md'deki pattern'i takip et:
   1. Service function — pure fetch, hook yok
   2. useQuery/useMutation hook — service'i sarar
-  3. Component'te kullan — loading(Skeleton) / error(inline) / empty(Empty)
+  3. Component'te kullan — loading(Skeleton) / error(ErrorMessage) / empty(EmptyState)
 ```
 
 #### 3. `REGISTRY.md` — Component Kataloğu
 
-UI yazmadan önce okunur. 50+ shadcn/ui ve 2 shared component'in listesi. Ham HTML yazmadan önce mutlaka kontrol et.
+UI yazmadan önce okunur. 50+ shadcn/ui ve 4 shared component'in listesi (EmptyState, ErrorMessage, ErrorBoundary, FormValidationDebugger). Ham HTML yazmadan önce mutlaka kontrol et.
 
 ```
 Senaryo: "Dropdown menü lazım"
@@ -139,7 +139,7 @@ Senaryo: "Dropdown menü lazım"
 
 #### 4. `design-system-rules.md` — Görsel Tokenlar
 
-UI oluştururken okunur. Renk sistemi (10 semantic token), tipografi (6 seviye), font, spacing, shadow, responsive, component composition kuralları.
+UI oluştururken okunur. Renk sistemi (13 semantic token grubu), tipografi (6 seviye), 3 font, spacing, shadow, responsive, component composition kuralları (8 madde).
 
 ```
 Senaryo: "Card'a arka plan rengi vereceğim"
@@ -188,11 +188,11 @@ Tam feature yapısı + route dosyaları oluşturur:
 ```
 /scaffold auth
 → features/auth/
-    types/index.ts
+    types/index.ts             (domain modelleri)
+    validations/auth-schema.ts (zod + inferred types)
     services/auth-service.ts   (CRUD hooks)
     components/                (boş)
     hooks/                     (boş)
-    validations/               (boş)
 → app/auth/
     page.tsx + loading.tsx + error.tsx + not-found.tsx
 ```
@@ -310,9 +310,9 @@ Tam feature yapısı + route dosyaları:
 ```
 ✓ features/products/types/index.ts
 ✓ features/products/services/products-service.ts (CRUD hooks)
+✓ features/products/validations/products-schema.ts (zod + inferred types)
 ✓ features/products/components/ (boş)
 ✓ features/products/hooks/ (boş)
-✓ features/products/validations/ (boş)
 ✓ app/products/page.tsx + loading.tsx + error.tsx + not-found.tsx
 
 pnpm build ✓
@@ -408,7 +408,7 @@ Akış: service function → useQuery/useMutation hook → component
 - Swagger/OpenAPI URL
 - Backend kaynak kodu
 
-Placeholder tip, TODO endpoint veya mock API shape **yasaktır**. Bilgi olmadan kod yazılmaz.
+Placeholder tip, TODO endpoint veya mock API shape **yasaktır**. Bilgi olmadan kod yazılmaz. (İstisna: `/scaffold` ve `/page` skill'leri başlangıç noktası olarak minimal TODO placeholder oluşturur — gerçek veriyle hemen doldurulmalıdır.)
 
 ### Stil Kuralları
 
@@ -482,12 +482,12 @@ Sen: "Login, register, şifremi unuttum ve OTP sayfalarını yapalım"
 
 # 4. Oluşan yapı (gerçek endpoint bilgisinden türetilmiş):
 features/auth/
-  types/index.ts              → User, LoginInput, RegisterInput, OtpInput, ForgotInput
+  types/index.ts              → User (domain model only)
   validations/
-    login-schema.ts           → email + password, zod schema + defaults
-    register-schema.ts        → name + email + password + confirm
-    otp-schema.ts             → 6 haneli kod validasyonu
-    forgot-schema.ts          → email validasyonu
+    login-schema.ts           → email + password, zod schema + LoginInput type + defaults
+    register-schema.ts        → name + email + password + confirm, RegisterInput type
+    otp-schema.ts             → 6 haneli kod validasyonu, OtpInput type
+    forgot-schema.ts          → email validasyonu, ForgotInput type
   services/auth-service.ts    → useLogin, useRegister, useVerifyOtp, useForgotPassword
   components/
     login-form.tsx            → Single form pattern (form-rules.md)

@@ -1,6 +1,6 @@
 ---
 globs: ["**/*Form*", "**/*form*", "**/steps/**", "**/validations/**", "**/*.schema.ts", "**/*.validation.ts"]
-description: react-hook-form + zod pattern'leri, step wizard, validation schema kuralları
+description: react-hook-form + zod patterns, step wizard, validation schema rules
 alwaysApply: false
 ---
 

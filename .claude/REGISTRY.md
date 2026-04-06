@@ -84,6 +84,50 @@ import { FormValidationDebugger } from '@/components/shared/form-validation-debu
 
 ---
 
+### EmptyState
+
+**Path:** `@/components/shared/empty-state`
+**Purpose:** Convenience wrapper for empty states. Wraps shadcn `Empty` compositional components into a simple props-based API.
+**Props:**
+- `icon?` — React node for the icon (e.g., `<Users className="size-6" />`)
+- `title` — empty state heading
+- `description?` — explanatory text
+- `children?` — optional action content (buttons, links)
+- `className?` — additional styles
+
+**Usage:**
+```tsx
+import { EmptyState } from '@/components/shared/empty-state';
+import { Users } from '@phosphor-icons/react';
+
+<EmptyState
+  icon={<Users className="size-6" />}
+  title="No users"
+  description="Create your first user to get started."
+/>
+```
+
+---
+
+### ErrorMessage
+
+**Path:** `@/components/shared/error-message`
+**Purpose:** Displays query/fetch errors with consistent styling. Uses Alert destructive variant with optional retry button.
+**Props:**
+- `title?` — error heading (default: "Something went wrong")
+- `message?` — error detail text
+- `retry?` — callback for retry button
+- `className?` — additional styles
+
+**Usage:**
+```tsx
+import { ErrorMessage } from '@/components/shared/error-message';
+
+<ErrorMessage message={error.message} retry={refetch} />
+```
+
+---
+
 ### ErrorBoundary
 
 **Path:** `@/components/shared/error-boundary`

@@ -12,12 +12,15 @@ Use CSS variables from `app/globals.css`. Never hardcode colors.
 | `secondary` | Secondary buttons, subtle backgrounds | `bg-secondary text-secondary-foreground` |
 | `muted` | Disabled, placeholder, subtle text | `bg-muted text-muted-foreground` |
 | `accent` | Hover states, highlights | `bg-accent text-accent-foreground` |
-| `destructive` | Errors, delete actions, warnings | `bg-destructive text-destructive-foreground` |
+| `destructive` | Errors, delete actions, warnings | `text-destructive` or `bg-destructive/10 text-destructive` |
 | `card` | Card backgrounds | `bg-card text-card-foreground` |
 | `popover` | Popover/dropdown backgrounds | `bg-popover text-popover-foreground` |
 | `border` | All borders | `border-border` |
 | `input` | Input borders | `border-input` |
 | `ring` | Focus rings | `ring-ring` |
+| `background` | Page background | `bg-background text-foreground` |
+| `chart-1`~`5` | Chart/data visualization colors | `fill-chart-1`, `stroke-chart-2`, etc. |
+| `sidebar` | Sidebar background, borders, accents | `bg-sidebar`, `border-sidebar-border`, etc. |
 
 **Rules:**
 - Never use raw colors like `bg-blue-500` or `text-gray-600`
@@ -35,7 +38,10 @@ Use CSS variables from `app/globals.css`. Never hardcode colors.
 | Helper/caption | `text-xs text-muted-foreground` |
 | Mono/code | `font-mono text-xs` |
 
-**Font:** Source Sans 3 (`--font-sans`), Geist Mono (`--font-mono`)
+**Fonts:**
+- Body: Source Sans 3 (`--font-sans`)
+- Headings: `--font-heading` (defaults to `--font-sans`, override in globals.css if needed)
+- Mono/code: Geist Mono (`--font-mono`)
 
 ## Spacing
 
@@ -80,10 +86,11 @@ Common pattern:
 1. **Cards** — Always use `Card` + `CardHeader` + `CardContent`. Never raw divs with card-like styles.
 2. **Forms** — Use `Field` + `Label` + `Input`/`Select`/etc. Never raw form elements.
 3. **Buttons** — Primary for main actions, `outline` for secondary, `ghost` for tertiary, `destructive` for delete.
-4. **Empty states** — Use `Empty` component when no data. Never blank space.
-5. **Loading** — `Skeleton` for initial data loading (page/section placeholders). `Spinner` for in-progress actions (button submit, inline fetch). Spinner is client-only.
-6. **Feedback** — Use `toast()` from sonner for mutations. Never `alert()`.
-7. **Icons** — Phosphor only (see `CLAUDE.md` for import paths). Size `size-4` inline, `size-5` standalone.
+4. **Empty states** — Use `EmptyState` from `@/components/shared/empty-state` for common cases. For advanced layouts, use shadcn `Empty` compositional API directly. Never blank space.
+5. **Error states** — Use `ErrorMessage` from `@/components/shared/error-message` for query/fetch errors. Pass `retry` for refetch. Never inline `<p>` for query errors. (Form field-level validation errors use inline `<p>` — see `form-rules.md`.)
+6. **Loading** — `Skeleton` for initial data loading (page/section placeholders). `Spinner` for in-progress actions (button submit, inline fetch). Spinner is client-only.
+7. **Feedback** — Use `toast()` from sonner for mutations. Never `window.alert()`. For inline messages (info, warnings), use the shadcn `Alert` component.
+8. **Icons** — Phosphor only (see `CLAUDE.md` for import paths). Size `size-4` inline, `size-5` standalone.
 
 ## Anti-Patterns (Visual)
 
@@ -91,6 +98,6 @@ Common pattern:
 - ❌ `text-gray-500` → ✅ `text-muted-foreground`
 - ❌ `border-gray-200` → ✅ `border-border`
 - ❌ `dark:bg-gray-800` → ✅ `bg-card` (auto dark mode)
-- ❌ `window.alert()` → ✅ `toast()`
+- ❌ `window.alert()` → ✅ `toast()` (for inline messages use shadcn `Alert`)
 
 For component anti-patterns (raw HTML, wrong icon library) see `CLAUDE.md → Components`.

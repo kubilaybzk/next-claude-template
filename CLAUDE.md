@@ -58,7 +58,7 @@ scripts/                # Dev scripts (onboarding, etc.)
 - Use shadcn from `@/components/ui/` — never modify ui/ files directly. This is `base-vega` style: use `render` prop for polymorphic components (NOT `asChild`).
 - **Before creating UI**: MUST read `.claude/REGISTRY.md` and `.claude/PATTERNS.md` — never use raw HTML when a shadcn or shared component exists.
 - Used in 1 place → `features/[name]/components/`. Used in 2+ places → `components/shared/`.
-- When adding to shared: update `.claude/REGISTRY.md` with name, path, props, usage example.
+- When adding to shared: update `.claude/REGISTRY.md` with name, path, props and small description.
 - Wrap feature sections with `<ErrorBoundary name="...">` from `@/components/shared/error-boundary`.
 - **Icons**: Phosphor only. Client: `@phosphor-icons/react`. Server: `@phosphor-icons/react/dist/ssr`.
 - **Pages**: Every `page.tsx` must export `metadata` for SEO. See `PATTERNS.md` for static/dynamic examples.
@@ -76,7 +76,7 @@ scripts/                # Dev scripts (onboarding, etc.)
 - Feature services: `features/[name]/services/` — export React Query hooks
 - Pattern: service function -> `useQuery`/`useMutation` hook -> component
 - Proxy: `proxy.ts` (Next.js 16 replacement for middleware) — auth, redirects, locale
-- **No guessing**: Never create placeholder types, TODO endpoints, or mock API shapes. If endpoint/type info is missing, ASK the user to provide endpoints, Swagger/OpenAPI URL, or backend source code. Do not proceed without real API information.
+- **No guessing**: Never create placeholder types, TODO endpoints, or mock API shapes. If endpoint/type info is missing, ASK the user to provide endpoints, Swagger/OpenAPI URL, or backend source code. Do not proceed without real API information. Exception: `/scaffold` and `/page` skills create minimal TODO placeholders as starting points — fill them in immediately with real data.
 
 ## Styling
 
