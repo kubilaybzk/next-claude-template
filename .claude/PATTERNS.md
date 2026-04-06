@@ -14,10 +14,10 @@ import type { User } from '@/features/users/types';
 
 interface UserCardProps {
   user: User;
-  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
 }
 
-export function UserCard({ user, onEdit }: UserCardProps) {
+export function UserCard({ user, onDelete }: UserCardProps) {
   return (
     <Card>
       <CardHeader>
@@ -25,9 +25,9 @@ export function UserCard({ user, onEdit }: UserCardProps) {
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground">{user.email}</p>
-        {onEdit && (
-          <Button variant="outline" size="sm" onClick={() => onEdit(user.id)}>
-            Edit
+        {onDelete && (
+          <Button variant="destructive" size="sm" onClick={() => onDelete(user.id)}>
+            Delete
           </Button>
         )}
       </CardContent>

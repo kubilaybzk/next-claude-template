@@ -49,6 +49,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Field } from '@/components/ui/field';
+import { Spinner } from '@/components/ui/spinner';
 import { FormValidationDebugger } from '@/components/shared/form-validation-debugger';
 import { toast } from 'sonner';
 
@@ -87,6 +88,7 @@ export function CreateUserForm() {
       </Field>
 
       <Button type="submit" disabled={methods.formState.isSubmitting}>
+        {methods.formState.isSubmitting && <Spinner />}
         Create User
       </Button>
 
@@ -101,7 +103,7 @@ export function CreateUserForm() {
 - Each step = separate component in `steps/` folder
 - Each step = separate zod schema in `validations/` folder
 - Step state managed with `useState` in orchestrator (Redux only if requested)
-- Step component receives `methods: UseFormReturn` as prop
+- Step component receives `methods: UseFormReturn<StepInput>` as prop
 
 ```tsx
 // features/onboarding/components/onboarding-wizard.tsx
@@ -152,12 +154,13 @@ export function OnboardingWizard() {
 ```tsx
 // features/onboarding/components/steps/step-one.tsx
 import type { UseFormReturn } from 'react-hook-form';
+import type { StepOneInput } from '@/features/onboarding/validations/step-one-schema';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Field } from '@/components/ui/field';
 
 interface StepOneProps {
-  methods: UseFormReturn;
+  methods: UseFormReturn<StepOneInput>;
 }
 
 export function StepOne({ methods }: StepOneProps) {
