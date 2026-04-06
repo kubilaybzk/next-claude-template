@@ -33,24 +33,27 @@ type: project
 
 This project uses a strict AI-assisted development workflow.
 
-**Workflow order:**
+**Workflow order (matches `CLAUDE.md`):**
 1. make-plan → get approval before any non-trivial feature
 2. smart-explore → token-efficient codebase research (AST-based)
 3. frontend-design → production-grade UI, avoid generic AI look
-4. figma-implement-design → design-to-code (load figma-use first)
-5. do → execute plan with parallel subagents
-6. simplify → clean up after feature completion
-7. code-review → self-review before PR
+4. figma-implement-design → design-to-code (load `figma-use` first for any Figma write/read that needs plugin context)
+5. do → execute plan with parallel subagents when possible
+6. simplify + code-review → after feature completion; self-review before PR
+7. verify → `pnpm build && pnpm lint` must pass before commit
 
 **Why:** Token cost optimization and consistent quality across all contributors.
 
-**How to apply:** Never skip the plan step. Always run simplify + code-review before committing. Use parallel agents for independent tasks.
+**How to apply:** Never skip the plan step. Do not deviate from the approved plan. Use parallel agents for independent tasks (research, test, lint). Use `mem-search` when asking whether something was solved in a prior session.
+
+**Language:** User-facing assistant replies in Turkish; code and comments in English.
 
 **Required reading before writing code:**
 - `CLAUDE.md` — project rules (loaded automatically every conversation)
 - `.claude/PATTERNS.md` — component, service, and form patterns
 - `components/shared/REGISTRY.md` — shadcn + shared component catalog
 - `.claude/design-system-rules.md` — color tokens, typography, spacing
+- `.claude/form-rules.md` — when building or editing forms (react-hook-form + zod)
 EOF
 
 # --- Team Standards ---
@@ -62,17 +65,18 @@ type: project
 ---
 
 **PR process:**
-- Branch naming: feat/xxx, fix/xxx, chore/xxx
-- PR must pass: pnpm build && pnpm lint
+- Branch naming: `feat/xxx`, `fix/xxx`, `chore/xxx`, `refactor/xxx`, `docs/xxx`
+- PR must pass: `pnpm build && pnpm lint`
 - Self-review with code-review skill before requesting team review
-- Conventional commits required
+- Conventional commits: `feat:`, `fix:`, `chore:`, `refactor:`, `docs:` (same as `CLAUDE.md`)
 
 **Code review checklist:**
-- No `any` types unless unavoidable
-- Error boundaries on route segments
-- No hardcoded secrets or API URLs
-- Accessible: semantic HTML, aria labels, keyboard nav
-- Mobile-first responsive design
+- Prop types explicit; no `any` unless unavoidable
+- Error boundaries on route segments; no silent failures
+- No hardcoded secrets; use environment variables
+- No `dangerouslySetInnerHTML`; sanitize all user input
+- Accessible: semantic HTML, aria labels, keyboard navigation
+- Mobile-first responsive design; semantic Tailwind tokens (no raw hex colors)
 
 **Deploy:** VPS / self-hosted (not Vercel/Netlify)
 EOF

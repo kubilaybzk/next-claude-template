@@ -78,7 +78,8 @@ scripts/                # Dev scripts (onboarding, etc.)
 
 ## Git
 
-Conventional commits: `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`
+- Conventional commits: `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`
+- Branch naming: `feat/…`, `fix/…`, `chore/…`, `refactor/…`, `docs/…`
 
 ## Workflow
 
@@ -105,6 +106,7 @@ Conventional commits: `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`
 - Always follow the approved plan. Do not deviate.
 - Run `pnpm build` after changes to verify.
 - Use memory: save feedback, project decisions, user preferences.
+- Use `mem-search` when the answer may be in persistent project memory from earlier sessions.
 - Use parallel agents for independent tasks (research, test, lint).
 - Keep this file under 120 lines.
 - Conversation language: Turkish. Code/comments: English.

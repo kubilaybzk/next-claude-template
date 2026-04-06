@@ -75,13 +75,126 @@ constants/              # App-wide constants
 scripts/                # Dev scripts (onboarding, etc.)
 ```
 
-## AI-Assisted Workflow
+## Claude Code Skills
+
+This project uses **Claude Code skills** — specialized CLI commands that work with AI to accelerate development. No installation needed; they're built into Claude Code.
+
+### Available Skills
+
+| Skill | Purpose | Usage | Example |
+|-------|---------|-------|---------|
+| **make-plan** | Design feature architecture before coding | `/make-plan [description]` | `/make-plan Add user authentication with JWT` |
+| **smart-explore** | Search codebase efficiently (token-optimized AST-based) | `/smart-explore [query]` | `/smart-explore Find all React Query hooks` |
+| **frontend-design** | Write production-grade UI components | Use in response to feature requests | "Build a login form" → UI + validation |
+| **figma-implement-design** | Convert Figma designs to code (1:1 fidelity) | Load `figma-use` skill first, then use | `/figma-use` then `/figma-implement-design` |
+| **do** | Execute plans with parallel subagents | `/do [plan description]` | `/do Execute the authentication feature plan` |
+| **simplify** | Review & optimize code after features | `/simplify` | Run after feature is complete |
+| **code-review** | Formal PR code review | `/code-review` | Before creating GitHub PR |
+
+### Workflow Example
 
 ```
-Plan (make-plan) → Explore (smart-explore) → Build UI (frontend-design)
-→ Figma (figma-implement-design) → Execute (do) → Review (simplify + code-review)
-→ Verify (build + lint) → Commit
+1. Start feature:         /make-plan Add dark mode toggle
+2. Get approval from user
+3. Research codebase:     /smart-explore Find theme context setup
+4. Build components:      /frontend-design Create theme toggle UI
+5. Execute plan:          /do Execute dark mode plan
+6. Self-review:           /simplify (optimize the code)
+                          /code-review (check quality)
+7. Verify:                pnpm build && pnpm lint
+8. Commit:                git commit -m "feat: add dark mode toggle"
 ```
+
+### Skill Details
+
+#### 1. **make-plan** — Architecture & Approval
+Designs a detailed implementation plan before coding. Prevents wasted work.
+```bash
+/make-plan Add form validation with react-hook-form and Zod
+```
+✅ Returns a step-by-step plan  
+✅ User approves/modifies  
+✅ Blocks coding until approved  
+
+#### 2. **smart-explore** — Token-Efficient Search
+Searches codebase using AST parsing (much cheaper than reading files).
+```bash
+/smart-explore Where are the Redux store slices?
+/smart-explore Show me all useMutation hooks
+/smart-explore Find error handling patterns
+```
+✅ Returns file locations + code snippets  
+✅ Uses tree-sitter (understands syntax, not just text)  
+✅ Avoids reading entire files  
+
+#### 3. **frontend-design** — Production UI
+Generates polished, accessible components. Avoids generic AI aesthetics.
+```bash
+"Build a reusable Button component with loading state"
+→ frontend-design invoked automatically
+```
+✅ Semantic HTML + ARIA labels  
+✅ Matches design system tokens  
+✅ Tailwind utilities only  
+
+#### 4. **figma-implement-design** — Design-to-Code
+Converts Figma files to production code with pixel-perfect fidelity.
+```bash
+# Must load figma-use skill first
+/figma-use
+# Then:
+/figma-implement-design
+# (Figma design automatically translated to React)
+```
+✅ Reads Figma components  
+✅ Generates TSX + Tailwind  
+✅ Maintains design system consistency  
+
+#### 5. **do** — Plan Execution
+Runs plans with parallel subagents (faster than sequential work).
+```bash
+/do Execute the dark mode feature plan from make-plan
+```
+✅ Parallelizes independent tasks  
+✅ Tracks progress  
+✅ Handles errors intelligently  
+
+#### 6. **simplify** — Code Optimization
+Reviews changed code for quality, reuse, and clarity.
+```bash
+/simplify
+```
+✅ Removes redundant code  
+✅ Suggests better patterns  
+✅ Auto-fixes common issues  
+
+#### 7. **code-review** — PR Quality Gate
+Formal review of pull request changes.
+```bash
+/code-review
+```
+✅ Checks against CLAUDE.md rules  
+✅ Verifies TypeScript safety  
+✅ Tests accessibility  
+
+### When to Use Each Skill
+
+| Situation | Skill |
+|-----------|-------|
+| "Build me a feature" | `make-plan` first |
+| "Find where X is in the code" | `smart-explore` |
+| "Create a component" | `frontend-design` |
+| "Turn this Figma design into code" | `figma-use` + `figma-implement-design` |
+| "I have the plan, let's build it" | `do` |
+| "Is my code good?" | `simplify` + `code-review` |
+| "Before I commit" | `code-review` + `pnpm build` |
+
+### Rules
+
+- ⚠️ **Always plan first** — non-trivial features need `/make-plan` + approval
+- ⚠️ **Figma rule** — load `/figma-use` BEFORE any `figma-implement-design`
+- ⚠️ **Verify before commit** — `pnpm build && pnpm lint` must pass
+- ✅ Skills are free — no setup, no API keys, built into Claude Code
 
 ## Contributing
 
