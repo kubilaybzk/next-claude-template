@@ -688,9 +688,203 @@ Döner:
 
 ---
 
-## Eklenmiş Kaynaklar
+## Kural Dosyaları — `.claude/` Rehberi
 
-- [CLAUDE.md](./CLAUDE.md) — Tüm proje kuralları
-- [.claude/PATTERNS.md](./.claude/PATTERNS.md) — Kod desenleri
-- [.claude/design-system-rules.md](./.claude/design-system-rules.md) — Stil tokenları
-- [.claude/REGISTRY.md](./.claude/REGISTRY.md) — Paylaşılan bileşenler
+Bu projede 7 kural dosyası vardır. Her biri farklı bir amaca hizmet eder ve farklı zamanlarda yüklenir.
+
+### Sorumluluk Haritası
+
+```
+CLAUDE.md                  ← Her konuşmada otomatik yüklenir
+  │                           Tüm kuralların TEK kaynağı
+  │
+  ├── .claude/PATTERNS.md  ← UI/service yazmadan önce okunur
+  │                           Kod örnekleri (component, query, service, SEO)
+  │
+  ├── .claude/REGISTRY.md  ← UI yazmadan önce okunur
+  │                           Saf component kataloğu (50+ shadcn + shared)
+  │
+  ├── .claude/design-system-rules.md  ← UI oluştururken okunur
+  │                           Görsel tokenlar (renk, font, spacing, composition)
+  │
+  ├── .claude/form-rules.md  ← Form dosyalarında otomatik yüklenir (globs)
+  │                             react-hook-form + zod pattern'leri
+  │
+  └── .claude/skills/
+      ├── page.md           ← /page komutuyla yüklenir
+      │                       Route scaffold (page + loading + error + not-found)
+      └── scaffold.md       ← /scaffold komutuyla yüklenir
+                              Feature scaffold (types + services + components + route)
+```
+
+### 1. `CLAUDE.md` — Ana Kural Kaynağı
+
+**Ne yapar:** Stack, naming, component kuralları, state management, API layer, styling, git, workflow, quality — tüm kuralların tek kaynağı.
+
+**Ne zaman yüklenir:** Her konuşmada otomatik.
+
+**Diğer dosyalar bunu referans eder**, kendisi kural tekrarlamaz.
+
+```
+Örnek senaryo: "Button'u Link olarak kullanmam lazım"
+→ CLAUDE.md:58 der ki: "base-vega style: use render prop (NOT asChild)"
+→ Kod:
+  <Button render={<Link href="/users" />}>Users</Button>
+```
+
+---
+
+### 2. `.claude/PATTERNS.md` — Kod Örnekleri
+
+**Ne yapar:** Component, React Query (GET/mutation), service kullanımı, types, SEO metadata örnekleri. Kural koymaz — CLAUDE.md'ye referans verir.
+
+**Ne zaman okunur:** UI veya service yazmadan önce.
+
+```
+Örnek senaryo: "Yeni bir feature için service dosyası yazacağım"
+→ PATTERNS.md'deki React Query pattern'ini takip et:
+  1. Service function (pure fetch, no hooks)
+  2. useQuery/useMutation hook (wraps service)
+  3. Component'te kullan (loading → Skeleton, error → inline, empty → Empty)
+```
+
+```
+Örnek senaryo: "Yeni feature checklist'i ne?"
+→ PATTERNS.md New Feature Checklist:
+  1. types/index.ts → 2. validations/ → 3. services/ → 4. components/
+  5. app/[name]/ (page + loading + error + not-found)
+  6. store/ (rare) → 7. shared + REGISTRY update
+```
+
+---
+
+### 3. `.claude/REGISTRY.md` — Component Kataloğu
+
+**Ne yapar:** Projede mevcut 50+ shadcn/ui ve 2 shared component'in listesi. Import path'leri ve ne için kullanılacağı.
+
+**Ne zaman okunur:** UI yazmadan önce — ham HTML yerine mevcut component kullan.
+
+```
+Örnek senaryo: "Dropdown menü lazım"
+→ REGISTRY.md'de bak:
+  | DropdownMenu | Action menus | @/components/ui/dropdown-menu |
+→ Ham <select> veya custom div YAZMA, mevcut component'i kullan.
+```
+
+```
+Örnek senaryo: "Yeni shared component ekledim"
+→ REGISTRY.md'yi güncelle: name, path, props, usage example ekle.
+```
+
+---
+
+### 4. `.claude/design-system-rules.md` — Görsel Tasarım Tokenları
+
+**Ne yapar:** Renk sistemi (10 semantic token), tipografi (6 seviye), font bilgisi, spacing, border radius, shadow, responsive breakpoint'ler, component composition kuralları, görsel anti-pattern'ler.
+
+**Ne zaman okunur:** UI oluştururken.
+
+```
+Örnek senaryo: "Card'a arka plan rengi vereceğim"
+→ design-system-rules.md der ki:
+  ❌ bg-blue-500 (raw color)
+  ✅ bg-card (semantic token, dark mode otomatik)
+```
+
+```
+Örnek senaryo: "Loading state nasıl gösterilir?"
+→ design-system-rules.md Component Composition Rules:
+  - Sayfa/bölüm yükleniyorsa → Skeleton
+  - Button submit / inline fetch → Spinner (client-only)
+```
+
+```
+Örnek senaryo: "Icon boyutu ne olmalı?"
+→ design-system-rules.md:
+  - Metin içi (inline) → size-4
+  - Tek başına (standalone) → size-5
+  - Import: CLAUDE.md'deki client/server ayrımına bak
+```
+
+---
+
+### 5. `.claude/form-rules.md` — Form Pattern'leri
+
+**Ne yapar:** react-hook-form + zod pattern'leri. Schema location, single form, multi-step wizard, validation display, forbidden practices.
+
+**Ne zaman yüklenir:** Form dosyalarıyla çalışırken **otomatik** (globs: `*Form*`, `*form*`, `steps/`, `validations/`, `*.schema.ts`).
+
+```
+Örnek senaryo: "Login formu yazacağım"
+→ form-rules.md otomatik yüklenir ve der ki:
+  1. Schema: features/auth/validations/login-schema.ts
+     - Zod schema + inferred type + defaults export et
+  2. Form: useForm<LoginInput> + zodResolver + defaultValues
+  3. Validation: aria-describedby ile inline error (toast YASAK)
+  4. Submit: isSubmitting sırasında Spinner göster
+  5. Debug: <FormValidationDebugger methods={methods} /> ekle
+```
+
+```
+Örnek senaryo: "Multi-step onboarding wizard"
+→ form-rules.md wizard pattern:
+  - Her step = ayrı component (steps/ klasörü)
+  - Her step = ayrı zod schema (validations/ klasörü)
+  - Step component prop: UseFormReturn<StepInput> (typed!)
+  - Orchestrator: useState ile step yönetimi
+```
+
+---
+
+### 6. `.claude/skills/page.md` — `/page` Komutu
+
+**Ne yapar:** Yeni route sayfası oluşturur: `page.tsx` + `loading.tsx` + `error.tsx` + `not-found.tsx`.
+
+**Ne zaman kullanılır:** Sadece route dosyaları gerektiğinde (feature yapısı olmadan).
+
+```
+Örnek:
+  /page dashboard
+  → app/dashboard/page.tsx      (metadata export'lu)
+  → app/dashboard/loading.tsx   (Skeleton tabanlı)
+  → app/dashboard/error.tsx     ('use client', reset button)
+  → app/dashboard/not-found.tsx (404 fallback)
+
+  /page settings/profile
+  → app/settings/profile/page.tsx + loading + error + not-found
+```
+
+---
+
+### 7. `.claude/skills/scaffold.md` — `/scaffold` Komutu
+
+**Ne yapar:** Tam feature yapısı + route dosyaları oluşturur. Route dosyaları için page.md template'lerini kullanır.
+
+**Ne zaman kullanılır:** Yeni feature başlatırken (types + services + components + route).
+
+```
+Örnek:
+  /scaffold auth
+  → features/auth/
+      types/index.ts              (Auth interface + Create/Update input)
+      services/auth-service.ts    (CRUD hooks: useAuths, useAuth, useCreateAuth...)
+      components/                 (boş, manuel doldurulur)
+      hooks/                      (boş)
+      validations/                (boş)
+  → app/auth/
+      page.tsx + loading.tsx + error.tsx + not-found.tsx
+```
+
+---
+
+### Hangi Durumda Hangi Dosya?
+
+| Durum | Oku |
+|-------|-----|
+| Herhangi bir kod yazacağım | CLAUDE.md (otomatik yüklü) |
+| UI component yazacağım | + REGISTRY.md + PATTERNS.md |
+| Görsel stil kararı vereceğim | + design-system-rules.md |
+| Form yazacağım | + form-rules.md (otomatik yüklenir) |
+| Yeni route oluşturacağım | `/page <route>` |
+| Yeni feature başlatacağım | `/scaffold <name>` |
+| Shared component ekledim | REGISTRY.md'yi güncelle |
