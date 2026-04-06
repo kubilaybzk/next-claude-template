@@ -51,7 +51,7 @@ This project uses a strict AI-assisted development workflow.
 **Required reading before writing code:**
 - `CLAUDE.md` — project rules (loaded automatically every conversation)
 - `.claude/PATTERNS.md` — component, service, and form patterns
-- `components/shared/REGISTRY.md` — shadcn + shared component catalog
+- `.claude/REGISTRY.md` — shadcn + shared component catalog
 - `.claude/design-system-rules.md` — color tokens, typography, spacing
 - `.claude/form-rules.md` — when building or editing forms (react-hook-form + zod)
 EOF

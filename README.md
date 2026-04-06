@@ -104,7 +104,7 @@ export function UserRow({ user, onSelect }: UserRowProps) {
 }
 ```
 
-- Yeni UI'dan önce: `components/shared/REGISTRY.md` ve `.claude/PATTERNS.md` okunmalı; mümkünse ham `div`/`button` yerine shadcn veya paylaşılan bileşen kullanılır.
+- Yeni UI'dan önce: `.claude/REGISTRY.md` ve `.claude/PATTERNS.md` okunmalı; mümkünse ham `div`/`button` yerine shadcn veya paylaşılan bileşen kullanılır.
 - Formlar: `.claude/form-rules.md` ve PATTERNS içindeki form bölümü (react-hook-form + Zod).
 - API: `services/api-client.ts`, sorgu anahtarları `services/query-keys.ts` fabrika deseni `[feature, resource, params?]`.
 
@@ -693,4 +693,4 @@ Döner:
 - [CLAUDE.md](./CLAUDE.md) — Tüm proje kuralları
 - [.claude/PATTERNS.md](./.claude/PATTERNS.md) — Kod desenleri
 - [.claude/design-system-rules.md](./.claude/design-system-rules.md) — Stil tokenları
-- [components/shared/REGISTRY.md](./components/shared/REGISTRY.md) — Paylaşılan bileşenler
+- [.claude/REGISTRY.md](./.claude/REGISTRY.md) — Paylaşılan bileşenler

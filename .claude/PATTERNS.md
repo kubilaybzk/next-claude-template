@@ -37,22 +37,16 @@ export function UserCard({ user, onEdit }: UserCardProps) {
 }
 ```
 
-**Rules:**
+**Rules:** See `CLAUDE.md → Components` for full rules. Key patterns:
 - Props interface above component, always explicit types
 - Destructure props in function signature
-- Use shadcn components — never raw HTML for buttons, inputs, cards, etc.
-- Wrap with `<ErrorBoundary>` at feature section level, not every component
-- This project uses `base-vega` style: use `render` prop (not `asChild`) for polymorphic components
 
 **Polymorphic component (Button as Link):**
 ```tsx
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-
-// ✅ Correct — base-vega style
+// ✅ Correct — render prop (base-vega)
 <Button render={<Link href="/users" />}>Go to Users</Button>
 
-// ❌ Wrong — asChild does not exist in base-vega
+// ❌ Wrong — asChild does not exist
 <Button asChild><Link href="/users">Go to Users</Link></Button>
 ```
 
@@ -141,12 +135,11 @@ export function useDeleteUser() {
 }
 ```
 
-**Rules:**
+**Rules:** See `CLAUDE.md → State Management / API Layer` for architecture rules. Key patterns:
 - Service function = pure fetch, no React hooks
 - Hook = wraps service with `useQuery`/`useMutation`
 - Always invalidate related queries on mutation success
 - Use `enabled` for conditional fetching
-- Never store API data in Redux — React Query is the server state cache
 
 ## Using Services in Components
 
@@ -156,6 +149,7 @@ export function useDeleteUser() {
 
 import { useUsers, useDeleteUser } from '@/features/users/services/user-service';
 import { ErrorBoundary } from '@/components/shared/error-boundary';
+import { Empty } from '@/components/ui/empty';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 
@@ -165,6 +159,7 @@ export function UserList() {
 
   if (isLoading) return <UserListSkeleton />;
   if (error) return <p className="text-destructive">{error.message}</p>;
+  if (!data?.data.length) return <Empty title="No users" description="Create your first user to get started." />;
 
   const handleDelete = (id: string) => {
     deleteUser.mutate(id, {
@@ -175,7 +170,7 @@ export function UserList() {
 
   return (
     <ErrorBoundary name="UserList">
-      {data?.data.map((user) => (
+      {data.data.map((user) => (
         <UserCard key={user.id} user={user} onDelete={handleDelete} />
       ))}
     </ErrorBoundary>
@@ -194,10 +189,8 @@ function UserListSkeleton() {
 ```
 
 **Rules:**
-- Show loading state with `Skeleton` component
-- Show error state — never silently fail
-- Use `toast()` from sonner for mutation feedback
-- Skeleton component = same file if small, separate file if reused
+- Loading → `Skeleton`, Error → inline message, Empty → `Empty` component, Mutation feedback → `toast()`
+- See `design-system-rules.md → Component Composition Rules` for Loading vs Spinner distinction
 
 ## Feature Types
 
@@ -253,13 +246,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 ## Forms
 
-Forms use react-hook-form + zod. Detailed patterns in `.claude/form-rules.md` (auto-loaded when working on form files).
-
-Key rules:
-- Schema in `features/[name]/validations/[schema-name]-schema.ts`
-- Every field needs a default value
-- Validation errors inline, never via toast
-- Add `<FormValidationDebugger methods={methods} />` to every form
+All form patterns are in `.claude/form-rules.md` (auto-loaded when working on form files).
 
 ## New Feature Checklist
 
@@ -270,4 +257,4 @@ When creating a new feature `[name]`:
 4. Create `features/[name]/components/` — UI components
 5. Add route in `app/[name]/page.tsx`
 6. If shared state needed → `features/[name]/store/[name]-slice.ts` (rare)
-7. If reusable component emerges → move to `components/shared/` + update `REGISTRY.md`
+7. If reusable component emerges → move to `components/shared/` + update `.claude/REGISTRY.md`

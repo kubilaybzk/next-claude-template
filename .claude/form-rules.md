@@ -14,7 +14,7 @@ alwaysApply: false
 
 ## Schema Location
 
-- Path: `features/{name}/validations/{schemaName}-schema.ts`
+- Path: `features/{name}/validations/{schema-name}-schema.ts`
 - Every schema file exports: zod schema + inferred type
 - Every field must have a default value
 

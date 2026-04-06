@@ -11,7 +11,7 @@ When invoked with `/page <route-name>`, create a complete page with all Next.js 
 ## Instructions
 
 1. Take the route name from the argument (e.g., `/page dashboard` → route is `dashboard`, `/page settings/profile` → nested route)
-2. Read `components/shared/REGISTRY.md` for available components
+2. Read `.claude/REGISTRY.md` for available components
 3. Read `.claude/design-system-rules.md` for styling tokens
 4. Create the following files:
 
@@ -111,12 +111,7 @@ export default function NotFound() {
 
 ## Rules
 
-- Replace `<route>` with the kebab-case route path
-- Replace `<Name>` with PascalCase (e.g., `dashboard` → `Dashboard`, `user-profile` → `UserProfile`)
-- Replace `<Title>` with a human-readable title
-- Always export `metadata` for SEO — never create a page without it
-- Use shadcn components (Button, Skeleton) — never raw HTML
-- Use Phosphor icons — never Lucide or Heroicons
-- Use `render` prop for polymorphic components (not `asChild`)
-- After creating files, run `pnpm build` to verify no errors
+- Replace `<route>` with kebab-case, `<Name>` with PascalCase, `<Title>` with human-readable title
+- Follow all rules from `CLAUDE.md` (imports, render prop, icons, tokens, metadata)
+- After creating files, run `pnpm build` to verify
 - Report what was created to the user

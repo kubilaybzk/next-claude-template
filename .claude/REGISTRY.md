@@ -1,10 +1,8 @@
 # Component Registry
 
-> **Claude: Read this file before creating any UI component.** Use existing components instead of raw HTML/Tailwind. Never re-implement what already exists.
+> **Claude: Read this file before creating any UI component.** Check here first — if a component exists, use it. For rules (icons, render prop, styling) see `CLAUDE.md`.
 
 ## shadcn/ui Components (`@/components/ui/`)
-
-Never write raw `<button>`, `<input>`, `<table>`, etc. Use these instead:
 
 | Component | Use For | Import |
 |-----------|---------|--------|
@@ -62,10 +60,6 @@ Never write raw `<button>`, `<input>`, `<table>`, etc. Use these instead:
 | `InputGroup` | Input with prefix/suffix addons | `@/components/ui/input-group` |
 | `Item` | Generic list item | `@/components/ui/item` |
 | `NativeSelect` | Native HTML select dropdown | `@/components/ui/native-select` |
-
-**Icons:** Use `@phosphor-icons/react` (client) or `@phosphor-icons/react/dist/ssr` (server).
-
-**Note:** This is `base-vega` style. Use `render` prop instead of `asChild` for polymorphic components.
 
 ---
 

@@ -57,7 +57,7 @@ export default function HomePage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              48+ shadcn/ui components ready to use. See REGISTRY.md for the full catalog.
+              48+ shadcn/ui components ready to use. See .claude/REGISTRY.md for the full catalog.
             </p>
           </CardContent>
         </Card>

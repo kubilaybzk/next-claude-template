@@ -81,17 +81,16 @@ Common pattern:
 2. **Forms** — Use `Field` + `Label` + `Input`/`Select`/etc. Never raw form elements.
 3. **Buttons** — Primary for main actions, `outline` for secondary, `ghost` for tertiary, `destructive` for delete.
 4. **Empty states** — Use `Empty` component when no data. Never blank space.
-5. **Loading** — Use `Skeleton` for content loading, `Spinner` for actions (client only).
+5. **Loading** — `Skeleton` for initial data loading (page/section placeholders). `Spinner` for in-progress actions (button submit, inline fetch). Spinner is client-only.
 6. **Feedback** — Use `toast()` from sonner for mutations. Never `alert()`.
-7. **Icons** — Phosphor icons only. Size `size-4` inline, `size-5` for standalone.
+7. **Icons** — Phosphor only (see `CLAUDE.md` for import paths). Size `size-4` inline, `size-5` standalone.
 
-## Anti-Patterns
+## Anti-Patterns (Visual)
 
 - ❌ `bg-blue-500` → ✅ `bg-primary`
 - ❌ `text-gray-500` → ✅ `text-muted-foreground`
 - ❌ `border-gray-200` → ✅ `border-border`
-- ❌ `<button className="...">` → ✅ `<Button>`
-- ❌ `<input className="...">` → ✅ `<Input>`
-- ❌ `window.alert()` → ✅ `toast()`
 - ❌ `dark:bg-gray-800` → ✅ `bg-card` (auto dark mode)
-- ❌ Lucide/Heroicons → ✅ Phosphor Icons
+- ❌ `window.alert()` → ✅ `toast()`
+
+For component anti-patterns (raw HTML, wrong icon library) see `CLAUDE.md → Components`.

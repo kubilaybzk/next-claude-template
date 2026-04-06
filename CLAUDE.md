@@ -36,6 +36,12 @@ store/                  # Redux store config
 types/                  # Shared TypeScript types
 constants/              # App-wide constants
 scripts/                # Dev scripts (onboarding, etc.)
+.claude/
+  PATTERNS.md           # Development patterns (components, queries, forms)
+  REGISTRY.md           # shadcn + shared component catalog
+  design-system-rules.md # Color tokens, typography, spacing
+  form-rules.md         # react-hook-form + zod patterns (auto-loaded)
+  skills/               # Project-local skills (/page, /scaffold)
 ```
 
 ## Naming
@@ -49,11 +55,12 @@ scripts/                # Dev scripts (onboarding, etc.)
 ## Components
 
 - Server components by default. Add `'use client'` only when needed.
-- Use shadcn from `@/components/ui/` — never modify ui/ files directly.
-- **Before creating UI**: MUST read `components/shared/REGISTRY.md` and `.claude/PATTERNS.md` — never use raw HTML when a shadcn or shared component exists.
+- Use shadcn from `@/components/ui/` — never modify ui/ files directly. This is `base-vega` style: use `render` prop for polymorphic components (NOT `asChild`).
+- **Before creating UI**: MUST read `.claude/REGISTRY.md` and `.claude/PATTERNS.md` — never use raw HTML when a shadcn or shared component exists.
 - Used in 1 place → `features/[name]/components/`. Used in 2+ places → `components/shared/`.
-- When adding to shared: update `REGISTRY.md` with name, path, props, usage example.
+- When adding to shared: update `.claude/REGISTRY.md` with name, path, props, usage example.
 - Wrap feature sections with `<ErrorBoundary name="...">` from `@/components/shared/error-boundary`.
+- **Icons**: Phosphor only. Client: `@phosphor-icons/react`. Server: `@phosphor-icons/react/dist/ssr`.
 
 ## State Management
 
@@ -74,6 +81,7 @@ scripts/                # Dev scripts (onboarding, etc.)
 - Tailwind utilities only. No custom CSS unless absolutely necessary.
 - Use `cn()` from `@/lib/utils` for conditional classes.
 - CSS variables defined in `app/globals.css`. Read `.claude/design-system-rules.md` for tokens.
+- Fonts: Source Sans 3 (`--font-sans`), Geist Mono (`--font-mono`).
 - Mobile-first approach. Use semantic color tokens, never raw colors.
 
 ## Git
@@ -85,11 +93,12 @@ scripts/                # Dev scripts (onboarding, etc.)
 
 1. **Plan first**: Use `make-plan` before any non-trivial feature. Never code without an approved plan.
 2. **Explore smart**: Use `smart-explore` for codebase research (AST-based, token-efficient). Avoid reading full files.
-3. **Build UI**: Use `frontend-design` skill for components. Avoid generic AI aesthetics.
-4. **Figma**: Use `figma-implement-design` for design-to-code. Always load `figma-use` skill first.
-5. **Execute**: Use `do` to run plans with parallel subagents when possible.
-6. **Review**: Run `simplify` after feature completion. Run `code-review` before PR.
-7. **Verify**: `pnpm build && pnpm lint` must pass before commit.
+3. **Scaffold**: Use `/scaffold <name>` for new features, `/page <route>` for new routes.
+4. **Build UI**: Use `frontend-design` skill for components. Avoid generic AI aesthetics.
+5. **Figma**: Use `figma-implement-design` for design-to-code. Always load `figma-use` skill first.
+6. **Execute**: Use `do` to run plans with parallel subagents when possible.
+7. **Review**: Run `simplify` after feature completion. Run `code-review` before PR.
+8. **Verify**: `pnpm build && pnpm lint` must pass before commit.
 
 ## Quality Rules
 

@@ -12,7 +12,7 @@ When invoked with `/scaffold <feature-name>`, create a complete feature scaffold
 
 1. Take the feature name from the argument (e.g., `/scaffold auth` → feature name is `auth`)
 2. Read `.claude/PATTERNS.md` for the correct file patterns
-3. Read `components/shared/REGISTRY.md` to avoid duplicating existing components
+3. Read `.claude/REGISTRY.md` to avoid duplicating existing components
 4. Read `.claude/design-system-rules.md` for styling tokens and component composition rules
 5. Create the following structure:
 
@@ -25,6 +25,9 @@ features/<name>/
   types/index.ts
 app/<name>/
   page.tsx
+  loading.tsx
+  error.tsx
+  not-found.tsx
 ```
 
 ## File Templates
@@ -141,15 +144,13 @@ export default function <Name>Page() {
 }
 ```
 
+### `app/<name>/loading.tsx`, `error.tsx`, `not-found.tsx`
+
+Use the same templates from `.claude/skills/page.md`. Replace `<route>` with `<name>`.
+
 ## Rules
 
-- Replace `<name>` with the kebab-case feature name (e.g., `user-profile`)
-- Replace `<Name>` with the PascalCase feature name (e.g., `UserProfile`)
-- All imports must use `@/` alias
-- Service file must follow the pattern from `.claude/PATTERNS.md`
-- Types must follow the pattern from `.claude/PATTERNS.md`
-- Always export `metadata` in page.tsx — never create a page without it
-- Use `render` prop (not `asChild`) for polymorphic components (base-vega style)
-- Use semantic color tokens from design-system-rules.md — never hardcode colors
-- After creating files, run `pnpm build` to verify no errors
+- Replace `<name>` with kebab-case, `<Name>` with PascalCase
+- Follow all rules from `CLAUDE.md` (imports, render prop, icons, tokens, metadata)
+- After creating files, run `pnpm build` to verify
 - Report what was created to the user
