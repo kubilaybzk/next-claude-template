@@ -76,6 +76,7 @@ scripts/                # Dev scripts (onboarding, etc.)
 - Feature services: `features/[name]/services/` — export React Query hooks
 - Pattern: service function -> `useQuery`/`useMutation` hook -> component
 - Proxy: `proxy.ts` (Next.js 16 replacement for middleware) — auth, redirects, locale
+- **No guessing**: Never create placeholder types, TODO endpoints, or mock API shapes. If endpoint/type info is missing, ASK the user to provide endpoints, Swagger/OpenAPI URL, or backend source code. Do not proceed without real API information.
 
 ## Styling
 
@@ -91,7 +92,7 @@ scripts/                # Dev scripts (onboarding, etc.)
 
 ## Workflow
 
-1. **Plan first**: Use `make-plan` before any non-trivial feature. Never code without an approved plan.
+1. **Plan first**: Use `make-plan` before any non-trivial feature. Never code without an approved plan. During planning, ask: (a) API endpoints & types — request Swagger URL, endpoint list, or backend source; (b) Design — ask if user has a Figma file or reference design. If no design provided, create UI using `frontend-design` skill.
 2. **Explore smart**: Use `smart-explore` for codebase research (AST-based, token-efficient). Avoid reading full files.
 3. **Scaffold**: Use `/scaffold <name>` for new features, `/page <route>` for new routes.
 4. **Build UI**: Use `frontend-design` skill for components. Avoid generic AI aesthetics.

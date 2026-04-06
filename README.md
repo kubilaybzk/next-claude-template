@@ -217,6 +217,11 @@ Tam feature yapısı + route dosyaları oluşturur:
 
 ```
 1. Plan        → /make-plan          Onay al, sonra kodla
+   Claude sana şunları sorar:
+   (a) API bilgisi → Endpoint listesi, Swagger URL veya backend kaynak kodu iste
+   (b) Tasarım   → Figma dosyası veya referans design var mı?
+   → API bilgisi verilmeden tip/servis OLUŞTURULMAZ (tahmin/placeholder yasak)
+   → Tasarım verilmezse frontend-design skill ile kendisi tasarlar
 2. Keşif       → /smart-explore      AST tabanlı, token-verimli arama
 3. Scaffold    → /scaffold veya /page Yapı iskeletini oluştur
 4. UI          → frontend-design     Üretim kalitesi bileşenler
@@ -250,7 +255,10 @@ Tam feature yapısı + route dosyaları oluşturur:
 
 #### `/make-plan` — Plan Oluştur
 
-Feature başlamadan önce mimari plan oluşturur. Onay alınmadan kod yazılmaz.
+Feature başlamadan önce mimari plan oluşturur. Onay alınmadan kod yazılmaz. **Planlama sırasında Claude sana iki soru sorar:**
+
+1. **API bilgisi** — Endpoint listesi, Swagger URL veya backend kaynak kodu paylaş. Bilgi verilmeden tip/servis oluşturulmaz.
+2. **Tasarım** — Figma dosyası veya referans design var mı? Yoksa `frontend-design` ile kendisi tasarlar.
 
 ```bash
 /make-plan Ürün filtreleme ve sayfalama sistemi
@@ -258,6 +266,12 @@ Feature başlamadan önce mimari plan oluşturur. Onay alınmadan kod yazılmaz.
 
 Çıktı:
 ```
+❓ API endpoint bilgilerinizi paylaşır mısınız?
+   (Swagger URL, endpoint listesi veya backend kaynak kodu)
+❓ Kullanmak istediğiniz bir Figma/design var mı?
+
+→ Bilgiler alındıktan sonra:
+
 PLAN: Ürün Filtreleme
 ├── Faz 1: types + validations (1 dosya)
 ├── Faz 2: services + hooks (3 dosya)
@@ -389,6 +403,13 @@ features/[name]/services/   → React Query hook'ları
 Akış: service function → useQuery/useMutation hook → component
 ```
 
+**Önemli:** Claude asla tahminle tip veya endpoint oluşturmaz. API bilgisi eksikse sana sorar:
+- Endpoint listesi (URL, method, request/response shape)
+- Swagger/OpenAPI URL
+- Backend kaynak kodu
+
+Placeholder tip, TODO endpoint veya mock API shape **yasaktır**. Bilgi olmadan kod yazılmaz.
+
 ### Stil Kuralları
 
 - Yalnızca Tailwind utility class'ları. Custom CSS sadece zorunluysa.
@@ -430,30 +451,58 @@ Akış: service function → useQuery/useMutation hook → component
 
 ```bash
 # 1. Plan
-/make-plan Login, register ve OTP doğrulama sayfaları
+Sen: "Login, register, şifremi unuttum ve OTP sayfalarını yapalım"
 
-# 2. Scaffold
+# Claude sana sorar:
+# ┌─────────────────────────────────────────────────────────┐
+# │ API endpoint bilgilerinizi paylaşır mısınız?            │
+# │ Swagger URL, endpoint listesi veya backend kaynak kodu  │
+# │ olabilir. Bu bilgi olmadan tipleri ve servisleri         │
+# │ oluşturamam.                                            │
+# │                                                         │
+# │ Ayrıca kullanmak istediğiniz bir Figma tasarımı veya    │
+# │ referans design var mı? Yoksa frontend-design ile       │
+# │ kendim tasarlayacağım.                                  │
+# └─────────────────────────────────────────────────────────┘
+
+# Sen cevaplarsın:
+# Swagger: https://api.example.com/docs
+# veya endpoint listesi:
+#   POST /api/auth/login       → { email, password } → { accessToken, user }
+#   POST /api/auth/register    → { name, email, password } → { message }
+#   POST /api/auth/verify-otp  → { email, otp } → { accessToken, user }
+#   POST /api/auth/forgot      → { email } → { message }
+# Figma: https://figma.com/file/xxx (veya "Figma yok, kendin tasarla")
+
+# 2. Claude planı oluşturur (API bilgisine dayalı, tahmin yok)
+/make-plan → onay bekler
+
+# 3. Scaffold
 /scaffold auth
 
-# 3. Oluşan yapı:
+# 4. Oluşan yapı (gerçek endpoint bilgisinden türetilmiş):
 features/auth/
-  types/index.ts              → User, LoginInput, RegisterInput, OtpInput
+  types/index.ts              → User, LoginInput, RegisterInput, OtpInput, ForgotInput
   validations/
     login-schema.ts           → email + password, zod schema + defaults
     register-schema.ts        → name + email + password + confirm
     otp-schema.ts             → 6 haneli kod validasyonu
-  services/auth-service.ts    → useLogin, useRegister, useVerifyOtp
+    forgot-schema.ts          → email validasyonu
+  services/auth-service.ts    → useLogin, useRegister, useVerifyOtp, useForgotPassword
   components/
     login-form.tsx            → Single form pattern (form-rules.md)
     register-form.tsx         → Single form pattern
     otp-form.tsx              → InputOTP component (REGISTRY.md'den)
+    forgot-form.tsx           → Single form pattern
 app/auth/
   page.tsx                    → Metadata + Tab navigation (login/register)
+  forgot/page.tsx             → Şifremi unuttum sayfası
+  verify/page.tsx             → OTP doğrulama sayfası
   loading.tsx                 → Skeleton
   error.tsx                   → Error boundary
   not-found.tsx               → 404
 
-# 4. Doğrulama
+# 5. Doğrulama
 /simplify
 /code-review
 pnpm build && pnpm lint
