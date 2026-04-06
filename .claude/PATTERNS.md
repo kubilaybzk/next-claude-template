@@ -10,7 +10,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ErrorBoundary } from '@/components/shared/error-boundary';
 import type { User } from '@/features/users/types';
 
 interface UserCardProps {
@@ -255,6 +254,6 @@ When creating a new feature `[name]`:
 2. Create `features/[name]/validations/` — zod schemas + inferred types
 3. Create `features/[name]/services/[name]-service.ts` — API hooks
 4. Create `features/[name]/components/` — UI components
-5. Add route in `app/[name]/page.tsx`
+5. Add route in `app/[name]/` — `page.tsx` + `loading.tsx` + `error.tsx` + `not-found.tsx`
 6. If shared state needed → `features/[name]/store/[name]-slice.ts` (rare)
 7. If reusable component emerges → move to `components/shared/` + update `.claude/REGISTRY.md`

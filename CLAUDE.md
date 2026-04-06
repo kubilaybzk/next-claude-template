@@ -61,6 +61,7 @@ scripts/                # Dev scripts (onboarding, etc.)
 - When adding to shared: update `.claude/REGISTRY.md` with name, path, props, usage example.
 - Wrap feature sections with `<ErrorBoundary name="...">` from `@/components/shared/error-boundary`.
 - **Icons**: Phosphor only. Client: `@phosphor-icons/react`. Server: `@phosphor-icons/react/dist/ssr`.
+- **Pages**: Every `page.tsx` must export `metadata` for SEO. See `PATTERNS.md` for static/dynamic examples.
 
 ## State Management
 
@@ -81,8 +82,7 @@ scripts/                # Dev scripts (onboarding, etc.)
 - Tailwind utilities only. No custom CSS unless absolutely necessary.
 - Use `cn()` from `@/lib/utils` for conditional classes.
 - CSS variables defined in `app/globals.css`. Read `.claude/design-system-rules.md` for tokens.
-- Fonts: Source Sans 3 (`--font-sans`), Geist Mono (`--font-mono`).
-- Mobile-first approach. Use semantic color tokens, never raw colors.
+- Use semantic color tokens, never raw colors.
 
 ## Git
 
@@ -117,5 +117,4 @@ scripts/                # Dev scripts (onboarding, etc.)
 - Use memory: save feedback, project decisions, user preferences.
 - Use `mem-search` when the answer may be in persistent project memory from earlier sessions.
 - Use parallel agents for independent tasks (research, test, lint).
-- Keep this file under 120 lines.
 - Conversation language: Turkish. Code/comments: English.

@@ -72,17 +72,17 @@ export function CreateUserForm() {
     <form onSubmit={onSubmit} className="space-y-4">
       <Field>
         <Label htmlFor="name">Name</Label>
-        <Input id="name" {...methods.register('name')} />
+        <Input id="name" aria-describedby="name-error" {...methods.register('name')} />
         {methods.formState.errors.name && (
-          <p className="text-xs text-destructive">{methods.formState.errors.name.message}</p>
+          <p id="name-error" className="text-xs text-destructive">{methods.formState.errors.name.message}</p>
         )}
       </Field>
 
       <Field>
         <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" {...methods.register('email')} />
+        <Input id="email" type="email" aria-describedby="email-error" {...methods.register('email')} />
         {methods.formState.errors.email && (
-          <p className="text-xs text-destructive">{methods.formState.errors.email.message}</p>
+          <p id="email-error" className="text-xs text-destructive">{methods.formState.errors.email.message}</p>
         )}
       </Field>
 
@@ -112,12 +112,13 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { StepOne } from '@/features/onboarding/components/steps/step-one';
 import { StepTwo } from '@/features/onboarding/components/steps/step-two';
-import { stepOneSchema, type StepOneInput } from '@/features/onboarding/validations/step-one-schema';
-import { stepTwoSchema, type StepTwoInput } from '@/features/onboarding/validations/step-two-schema';
+import { stepOneSchema, stepOneDefaults, type StepOneInput } from '@/features/onboarding/validations/step-one-schema';
+import { stepTwoSchema, stepTwoDefaults, type StepTwoInput } from '@/features/onboarding/validations/step-two-schema';
+import { FormValidationDebugger } from '@/components/shared/form-validation-debugger';
 
 const steps = [
-  { schema: stepOneSchema, component: StepOne },
-  { schema: stepTwoSchema, component: StepTwo },
+  { schema: stepOneSchema, defaults: stepOneDefaults, component: StepOne },
+  { schema: stepTwoSchema, defaults: stepTwoDefaults, component: StepTwo },
 ];
 
 export function OnboardingWizard() {
@@ -126,6 +127,7 @@ export function OnboardingWizard() {
 
   const methods = useForm({
     resolver: zodResolver(currentConfig.schema),
+    defaultValues: currentConfig.defaults,
   });
 
   const StepComponent = currentConfig.component;
@@ -141,6 +143,7 @@ export function OnboardingWizard() {
   return (
     <form onSubmit={handleNext}>
       <StepComponent methods={methods} />
+      <FormValidationDebugger methods={methods} />
     </form>
   );
 }
@@ -161,7 +164,10 @@ export function StepOne({ methods }: StepOneProps) {
   return (
     <Field>
       <Label htmlFor="name">Name</Label>
-      <Input id="name" {...methods.register('name')} />
+      <Input id="name" aria-describedby="name-error" {...methods.register('name')} />
+      {methods.formState.errors.name && (
+        <p id="name-error" className="text-xs text-destructive">{methods.formState.errors.name.message}</p>
+      )}
     </Field>
   );
 }
@@ -169,13 +175,13 @@ export function StepOne({ methods }: StepOneProps) {
 
 ## Validation Display Rules
 
-- Field-level errors: inline `<p className="text-xs text-destructive">` below field
+- Field-level errors: inline `<p id="{field}-error" className="text-xs text-destructive">` below field
+- Link error to input via `aria-describedby="{field}-error"` for accessibility
 - Never show form validation errors via toast — toast is for mutation results only
 - Add `<FormValidationDebugger methods={methods} />` as last child of every form
 
 ## Forbidden
 
 - Mixing uncontrolled inputs with react-hook-form
-- Showing form validation errors via toast
 - Forms without a zod schema
 - Inline schema definitions (always extract to validations/ folder)
