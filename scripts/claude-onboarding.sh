@@ -36,11 +36,12 @@ This project uses a strict AI-assisted development workflow.
 **Workflow order (matches `CLAUDE.md`):**
 1. make-plan → get approval before any non-trivial feature
 2. smart-explore → token-efficient codebase research (AST-based)
-3. frontend-design → production-grade UI, avoid generic AI look
-4. figma-implement-design → design-to-code (load `figma-use` first for any Figma write/read that needs plugin context)
-5. do → execute plan with parallel subagents when possible
-6. simplify + code-review → after feature completion; self-review before PR
-7. verify → `pnpm build && pnpm lint` must pass before commit
+3. /scaffold or /page → scaffold new features or routes
+4. frontend-design → production-grade UI, avoid generic AI look
+5. figma-implement-design → design-to-code (load `figma-use` first)
+6. do → execute plan with parallel subagents when possible
+7. simplify + code-review → after feature completion; self-review before PR
+8. verify → `pnpm build && pnpm lint` must pass before commit
 
 **Why:** Token cost optimization and consistent quality across all contributors.
 
