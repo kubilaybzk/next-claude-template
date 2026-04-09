@@ -90,47 +90,53 @@ export function useUser(id: string) {
 
 ## React Query — Mutation (POST/PUT/DELETE)
 
+**Preferred pattern: inline API calls into hooks for cleaner, self-contained code**
+
 ```tsx
-// features/users/services/user-service.ts (same file, add mutations)
+// features/users/services/user-service.ts (mutations)
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { CreateUserInput, UpdateUserInput } from '@/features/users/validations/create-user-schema';
 
-function createUser(data: CreateUserInput) {
-  return apiClient.post<User>('/users', data);
-}
-
-function updateUser(id: string, data: UpdateUserInput) {
-  return apiClient.put<User>(`/users/${id}`, data);
-}
-
-function deleteUser(id: string) {
-  return apiClient.delete(`/users/${id}`);
-}
-
+/**
+ * Mutation hook for creating user
+ * @returns Mutation object; invalidates user list cache on success
+ */
 export function useCreateUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: createUser,
+    mutationFn: (data: CreateUserInput) =>
+      apiClient.post<User>('/users', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.all('users') });
     },
   });
 }
 
+/**
+ * Mutation hook for updating user
+ * @param id - User ID to update
+ * @returns Mutation object; invalidates user list cache on success
+ */
 export function useUpdateUser(id: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: UpdateUserInput) => updateUser(id, data),
+    mutationFn: (data: UpdateUserInput) =>
+      apiClient.put<User>(`/users/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.all('users') });
     },
   });
 }
 
+/**
+ * Mutation hook for deleting user
+ * @returns Mutation object; invalidates user list cache on success
+ */
 export function useDeleteUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: deleteUser,
+    mutationFn: (id: string) =>
+      apiClient.delete(`/users/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.all('users') });
     },
@@ -139,10 +145,12 @@ export function useDeleteUser() {
 ```
 
 **Rules:** See `CLAUDE.md → State Management / API Layer` for architecture rules. Key patterns:
-- Service function = pure fetch, no React hooks
-- Hook = wraps service with `useQuery`/`useMutation`
+- **API calls inline into hooks** (no separate service functions). Each hook is self-contained.
+- Always document with JSDoc: params, return type, cache invalidation strategy
 - Always invalidate related queries on mutation success
-- Use `enabled` for conditional fetching
+- Use `enabled` for conditional fetching in queries
+- Fetch pattern: `useQuery({ queryFn: () => apiClient.get(...) })`
+- Mutation pattern: `useMutation({ mutationFn: (data) => apiClient.post(...), onSuccess: () => invalidate })`
 
 ## Using Services in Components
 

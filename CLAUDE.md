@@ -74,7 +74,9 @@ scripts/                # Dev scripts (onboarding, etc.)
 - Base client: `services/api-client.ts` (native fetch wrapper)
 - Query keys: `services/query-keys.ts` — factory pattern `[feature, resource, params?]`
 - Feature services: `features/[name]/services/` — export React Query hooks
-- Pattern: service function -> `useQuery`/`useMutation` hook -> component
+- **Hook pattern**: Inline API calls directly into hooks (no separate service functions). Each hook is self-contained with JSDoc documenting params, return type, and cache invalidation.
+  - Fetch: `useQuery({ queryFn: () => apiClient.get(...) })`
+  - Mutate: `useMutation({ mutationFn: (data) => apiClient.post(...), onSuccess: () => queryClient.invalidateQueries(...) })`
 - Proxy: `proxy.ts` (Next.js 16 replacement for middleware) — auth, redirects, locale
 - **No guessing**: Never create placeholder types, TODO endpoints, or mock API shapes. If endpoint/type info is missing, ASK the user to provide endpoints, Swagger/OpenAPI URL, or backend source code. Do not proceed without real API information. Exception: `/scaffold` and `/page` skills create minimal TODO placeholders as starting points — fill them in immediately with real data.
 
@@ -108,10 +110,11 @@ scripts/                # Dev scripts (onboarding, etc.)
 - No `dangerouslySetInnerHTML`. Sanitize all user input.
 - No hardcoded secrets. Use env variables.
 - Accessible by default: semantic HTML, aria labels, keyboard nav.
+- API layer: inline API calls into hooks (no separate private functions). Document with JSDoc: params, return type, cache invalidation strategy.
 
 ## Claude Behavior
 
-- Be concise. No verbose JSDoc on obvious code.
+- JSDoc policy: No verbose comments on obvious component code. **DO** add JSDoc to API layer (services), complex business logic, and React Query hooks to clarify cache behavior.
 - YAGNI — don't create abstractions until needed.
 - Always follow the approved plan. Do not deviate.
 - Run `pnpm build` after changes to verify.
